@@ -1,3 +1,5 @@
+const socket =io();
+
 let myvideoStream;
 
 const videoGrid =document.getElementById('video-grid');
@@ -17,8 +19,8 @@ navigator.mediaDevices.getUserMedia({
 
 
 const addVideoStream = (video,stream)=>{
+video.srcObject = stream;
 
-video.srcObject =stream;
 video.addEventListener('loadedmetadata',()=>{
 
     video.play();
