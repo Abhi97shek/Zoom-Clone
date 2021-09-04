@@ -3,28 +3,44 @@ const ejs = require('ejs');
 const socket = require('socket.io');
 const path =require('path');
 const { v4 : uuidv4} = require('uuid');
-const PORT = process.env.PORT || 8000 ;
 const app = express();
+// const server = require('http').Server(app);
 
+const PORT = process.env.PORT || 8000 ;
 
-
-const server = app.listen(PORT,()=>{
+const server =app.listen(PORT,()=>{
 
     console.log(`listing to the PORT ${PORT}`);
 });
 
 
-const io =socket(server);
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(server,{ debug:true });
+
+
+
+
+const io = socket(server);
 // setting a View Engine or middleware
 
 app.set('view engine','ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/peerjs',peerServer);
 
 
 io.on('connection',(socket)=>{
 
     console.log("connection established");
+
+    socket.on('join-room',(roomId,userId)=>{
+
+
+        socket.join(roomId);
+       
+        socket.broadcast.to(roomId).emit('user-connected',userId);
+
+    });
+
 
 });
 

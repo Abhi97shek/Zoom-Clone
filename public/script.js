@@ -1,5 +1,15 @@
 const socket =io();
 
+
+
+var peer = new Peer(undefined,{
+    path:'/peerjs',
+    host:'/',
+    port:'8000'
+
+}); 
+
+
 let myvideoStream;
 
 const videoGrid =document.getElementById('video-grid');
@@ -29,3 +39,16 @@ video.addEventListener('loadedmetadata',()=>{
     videoGrid.append(video);
 
 };
+
+peer.on('open',(userid)=>{
+
+    socket.emit('join-room',ROOM_ID,userid);
+
+});
+
+
+socket.on('user-connected',(userId)=>{
+
+
+    console.log(`New User Connected ${userId}`);
+});
