@@ -8,8 +8,6 @@ var peer = new Peer(undefined,{
     port:'8000'
 
 }); 
-
-
 let myvideoStream;
 
 const videoGrid =document.getElementById('video-grid');
@@ -30,9 +28,6 @@ navigator.mediaDevices.getUserMedia({
 
     myvideoStream =stream;
     addVideoStream(myvideo,stream);
-
-
-
     peer.on('call',(call)=>{
 
         call.answer(stream);
@@ -42,7 +37,6 @@ navigator.mediaDevices.getUserMedia({
             addVideoStream(video,userVideoStream);
         });
     });
-
     socket.on('user-connected',(userId)=>{
 
         const call =peer.call(userId,stream);
